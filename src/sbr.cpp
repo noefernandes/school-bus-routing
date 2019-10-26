@@ -1,6 +1,8 @@
 #include "sbr.h"
 #include <iostream>
 #include <limits>
+#include <fstream>
+#include <string>
 
 int** SBR::getAdjacencyMatrix(void){
 	return m;
@@ -29,7 +31,7 @@ void SBR::showGraph(void){
 	}
 }
 
-int SBR:: smallestAdjacentVertex(int a){
+int SBR::smallestAdjacentVertex(int a){
 	int smallestEdge = std::numeric_limits<int>::max();
 	int smallestVertex = 0;
 	for(auto i(0); i < V; i++){
@@ -38,6 +40,25 @@ int SBR:: smallestAdjacentVertex(int a){
 			smallestVertex = i;
 		}
 	}
-
 	return smallestVertex;
+}
+
+void SBR::loadStudentsPerStop(std::string filename){
+	std::ifstream ifs("files/" + filename);
+	std::string line;
+	int i(0);
+  	if (ifs.is_open()){
+    	while(getline(ifs,line)){
+      		C[i] = stoi(line);
+      		i++;
+    	}
+    	ifs.close();
+  	}
+}
+
+void SBR::showStudentsPerStop(void){
+	for(auto i(0); i < V; i++){
+		std::cout << C[i] << " ";
+	}
+	std::cout << std::endl;
 }

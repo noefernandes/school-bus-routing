@@ -13,5 +13,8 @@ int main(){
 	sbr.insertEdge(3, 3, 10);
 	sbr.showGraph();
 
+	sbr.loadStudentsPerStop("paradas.txt");
+	sbr.showStudentsPerStop();
+
 	return 0;
 }
