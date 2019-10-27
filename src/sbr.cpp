@@ -62,13 +62,19 @@ bool comparePair(Pair p1, Pair p2) {
     return p1.saved > p2.saved; 
 } 
 
-
 void SBR::showStudentsPerStop(void){
 	for(auto i(0); i < V; i++){
 		std::cout << C[i] << " ";
 	}
 	std::cout << std::endl;
 }
+
+/*bool SBR::cicleTimeIsCorrect(int i){
+	std::vector<int> newRoute = routes[i];
+
+
+}
+*/
 
 double SBR::getRouteDistance(int i){
 	double sumRoute = 0;
@@ -153,33 +159,27 @@ void SBR::clarkeAndWright(void){
 	double sumRoute = 0;
 
 
-	routes.resize(numberOfBus);
-	int caso;
 	for(auto i(0); i < numberOfBus; i++){
-		for(auto it = pairsList.begin(); it != pairsList.end(); it++){
-			if(it == pairsList.begin()){
-				while(not (visited[it->leftVertex] == false and visited[it->rightVertex] == false)){
-					it++;
-				}
+		std::vector<Pair>::iterator it = pairsList.begin();
+		while(not (visited[it->leftVertex] == false and visited[it->rightVertex] == false)){
+			it++;
+		}
+		
+		routes[i].push_back(0);
+		routes[i].push_back(it->leftVertex);
+		routes[i].push_back(it->rightVertex);
+		routes[i].push_back(0);
 
-				routes[i].push_back(0);
-				routes[i].push_back(it->leftVertex);
-				routes[i].push_back(it->rightVertex);
-				routes[i].push_back(0);
+		visited[it->rightVertex] = true;
+		visited[it->leftVertex] = true;
+		std::cout << it->leftVertex << " " << it->rightVertex << "\n";
+		pairsList.erase(it); 
 
-				visited[it->rightVertex] = true;
-				visited[it->leftVertex] = true;
-				std::cout << it->leftVertex << " " << it->rightVertex << "\n";
-				pairsList.erase(it);
-			
-			}
-
-			for(auto i(0); i < routes[0].size(); i++){
-				std::cout << routes[0][i] << " ";
-			}
-
-			std::cout << "\n";
+		for(it = pairsList.begin(); it != pairsList.end(); it++){
+			//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
 		}	
+
+		std::cout << "\n";
 	}
 	
 
