@@ -71,7 +71,7 @@ int main(){
 
 	//sbr.showGraph();
 
-	//sbr.loadStudentsPerStop("paradas.txt");
+	sbr.loadStudentsPerStop("paradas.txt");
 	//sbr.showStudentsPerStop();
 	sbr.clarkeAndWright();
 

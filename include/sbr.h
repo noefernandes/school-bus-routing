@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 
+const int BusCapacity =  1000; 
+
 struct Pair{
 	int leftVertex;
 	int rightVertex;
@@ -41,6 +43,9 @@ class SBR{
 			}
 
 			C = Ca; 
+
+			//Colocando numero de rotas.
+			routes.resize(2);
 		}
 
 		//Destrutor.
@@ -72,16 +77,22 @@ class SBR{
 	//Mostra o estado do grafo.
 	void showGraph(void);
 	void showStudentsPerStop(void);
+	double getRouteDistance(int i);
+	int getNumberOfStops(int i);
+	double getWeight(int i);
+
 
 	private:
 		//Matriz de adjacência contendo as distâncias entre os vértices (não adjcência representada pelo valor 0).
 		double** m;
 		//Número de vértices.
 		int V;
+		//Número de ônibus. 
+		int numberOfBus = 2;
 		//Carga a ser coletada (Número de alunos nas paradas).
 		int* C;
 		//Vector com todas as rotas formadas.
-		std::vector<std::string> rotas;
+		std::vector<std::vector<int>> routes;
 };
 
 #endif
