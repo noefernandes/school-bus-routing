@@ -70,7 +70,6 @@ class SBR{
 	//Realiza a leitura pelo da carga de alunos por parada.
 	void loadStudentsPerStop(std::string filename);
 	//Eurística de Clark & Wright na versão sequencial: encontra as rotas que cada ônibus percorrerá.
-	/*std::vector<std::string>*/ 
 	void clarkeAndWright(void);
 
 	/***************************************************** FUNÇÕES DE AUXÍLIO ****************************************************/

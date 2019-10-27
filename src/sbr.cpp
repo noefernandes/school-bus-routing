@@ -89,14 +89,15 @@ int SBR::getNumberOfStops(int i){
 double SBR::getWeight(int i){
 	double pesoTotal = 0;
 
-	for(unsigned int j(0); j < routes[0].size() - 2; j++){
-		pesoTotal += C[routes[0][j+1] - 1];
+	for(unsigned int j(0); j < routes[i].size() - 2; j++){
+		pesoTotal += C[routes[i][j+1] - 1];
+		std::cout << pesoTotal;
 	}
 
 	return pesoTotal;
 }
 
-/*std::vector<std::string>*/void SBR::clarkeAndWright(void){
+void SBR::clarkeAndWright(void){
 	//Vetor de economias.
 	double** E = new double*[V];
 
@@ -116,17 +117,7 @@ double SBR::getWeight(int i){
 		}
 	}
 
-
-
-
-
-
 	/****************************Ordenando cada par de vértices por sua economia de forma decrescente****************************/
-
-	
-
-
-
 	//Criando matriz com valor de economia por par, vertice extremo esquerdo e vertice extremo direito.
 	std::vector<Pair> pairsList;
 
@@ -150,60 +141,47 @@ double SBR::getWeight(int i){
 
 	/*********************************************** Procedimento sequencial *****************************************************/
 	
-	//Vetor informado os nós já visitados.
+	
 	bool visited[V];
 
 	for(auto i(0); i < V; i++){
 		visited[i] = false;
 	}
 
-	//Tempo de ciclo para uma rota.
+	
 	double cicleTime = 0;
-
-	//Distancia total da rota.
 	double sumRoute = 0;
 
-	/*
-	routes[0].push_back(0);
-	routes[0].push_back(pairsList[0].leftVertex);
-	routes[0].push_back(pairsList[0].rightVertex);
-	routes[0].push_back(0);
-	*/
 
-	//Tempo inicial da rota.
-	cicleTime = getRouteDistance(0)/30.0 + getNumberOfStops(0)*1.5;
-
-	//Peso total do veiculo na rota.
-	double pesoTotal = getWeight(0);
-	
-	//1 para primeira interação de cada rota, 2 senão.
+	routes.resize(numberOfBus);
 	int caso;
 	for(auto i(0); i < numberOfBus; i++){
-		for(auto it = pairsList.begin(); it < pairsList.end(); it++){
-			/*if((std::find(routes[i].begin(), routes[i].end(), it->leftVertex) != routes[i].end() or
-			   (std::find(routes[i].begin(), routes[i].end(), it->rightVertex)) != routes[i].end()) and
-			   not (visited[it->leftVertex] or visited[it->rightVertex])*/
-
+		for(auto it = pairsList.begin(); it != pairsList.end(); it++){
 			if(it == pairsList.begin()){
-				if(visited[it->leftVertex] == false and visited[it->rightVertex == false]){
-					routes[i].push_back(0);
-					routes[i].push_back(it->leftVertex);
-					routes[i].push_back(it->rightVertex);
-					routes[i].push_back(0);
+				while(not (visited[it->leftVertex] == false and visited[it->rightVertex] == false)){
+					it++;
 				}
+
+				routes[i].push_back(0);
+				routes[i].push_back(it->leftVertex);
+				routes[i].push_back(it->rightVertex);
+				routes[i].push_back(0);
+
+				visited[it->rightVertex] = true;
+				visited[it->leftVertex] = true;
+				std::cout << it->leftVertex << " " << it->rightVertex << "\n";
+				pairsList.erase(it);
 			
-			}else{
-
-				if(visited[it->leftVertex] == true and visited[it->rightVertex == false]){
-					routes[i].insert(routes[i].end() + 1, visited[it->rightVertex]);
-				}
-
-				if(visited[it->leftVertex] == false and visited[it->rightVertex == true]){
-					routes[i].insert(routes[i].end() - 2, visited[it->leftVertex]);
-				}	
 			}
+
+			for(auto i(0); i < routes[0].size(); i++){
+				std::cout << routes[0][i] << " ";
+			}
+
+			std::cout << "\n";
 		}	
 	}
+	
 
 
 
