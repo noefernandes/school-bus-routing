@@ -6,11 +6,11 @@
 #include <bits/stdc++.h> 
 #include <vector>
 
-double** SBR::getAdjacencyMatrix(void){
+int** SBR::getAdjacencyMatrix(void){
 	return m;
 }
 
-void SBR::insertEdge(int a, int b, double cost = 0){
+void SBR::insertEdge(int a, int b, int cost = 0){
 	m[a][b] = cost;
 	m[b][a] = cost;
 }
@@ -20,7 +20,7 @@ void SBR::removeEdge(int a, int b){
 	m[b][a] = 0;
 }
 
-double SBR::getEdgeCost(int a, int b){
+int SBR::getEdgeCost(int a, int b){
 	return m[a][b];
 }
 
@@ -69,15 +69,8 @@ void SBR::showStudentsPerStop(void){
 	std::cout << std::endl;
 }
 
-/*bool SBR::cicleTimeIsCorrect(int i){
-	std::vector<int> newRoute = routes[i];
-
-
-}
-*/
-
-double SBR::getRouteDistance(int i){
-	double sumRoute = 0;
+int SBR::getRouteDistance(int i){
+	int sumRoute = 0;
 	for(unsigned int j(0); j < routes[i].size() - 1; j++){
 		sumRoute += m[routes[i][j]][routes[i][j+1]];
 	}
@@ -92,60 +85,36 @@ int SBR::getNumberOfStops(int i){
 	return stops;
 }
 
-double SBR::getWeight(int i){
-	double pesoTotal = 0;
+int SBR::getWeight(int i){
+	int weightTotal = 0;
 
 	for(unsigned int j(0); j < routes[i].size() - 2; j++){
-		pesoTotal += C[routes[i][j+1] - 1];
-		//std::cout << pesoTotal;
+		weightTotal += C[routes[i][j+1] - 1];
 	}
 
-	return pesoTotal;
+	return weightTotal;
 }
 
-bool SBR::weightIsCorrect(double weightTotal, int vertex, int i){
+bool SBR::weightIsCorrect(int weightTotal, int vertex, int i){
 	std::vector<int> temp(routes[i].size());
 	std::copy(routes[i].begin(), routes[i].end(), temp.begin());
-	double pesoTotal = 0;
+	double weight = 0;
 
 	temp.insert(temp.begin() + 1, vertex);
 
 	for(unsigned int j(0); j < temp.size() - 2; j++){
-		pesoTotal += C[temp[j+1] - 1];
+		weight += C[temp[j+1] - 1];
 	}	
 
-	return pesoTotal <= 1000;
-}
-
-bool SBR::cicleTimeIsCorrect(double cicleTime, int vertex, int mode, int i){
-	std::vector<int> temp(routes[i].size());
-	std::copy(routes[i].begin(), routes[i].end(), temp.begin());
-	double sumRoute = 0;
-	int stops = -1;
-
-	if(mode == 1){
-		temp.insert(temp.begin() + 1, vertex);
-	}else{
-		temp.insert(temp.end() - 2, vertex);
-	}
-
-	for(unsigned int j(0); j < temp.size() - 1; j++){
-		sumRoute += m[temp[j]][temp[j+1]];
-	}
-		
-	for(unsigned int j(0); j < temp.size() - 1; j++){
-		stops++;
-	}
-
-	return sumRoute/30.0 + stops*1.5 <= 8.0;
+	return weight <= BusCapacity;
 }
 
 void SBR::clarkeAndWright(void){
 	//Vetor de economias.
-	double** E = new double*[V];
+	int** E = new int*[V];
 
 	for(auto i(0); i < V; i++){
-		E[i] = new double[V];
+		E[i] = new int[V];
 		for(auto j(0); j < V; j++){
 			E[i][j] = 0;
 		}
@@ -177,10 +146,6 @@ void SBR::clarkeAndWright(void){
 	//Ordenando a lista de pares pelas duas economias.
 	std::sort(pairsList.begin(), pairsList.end(), comparePair);
 
-	
-
-
-
 
 	/*********************************************** Procedimento sequencial *****************************************************/
 	
@@ -205,13 +170,11 @@ void SBR::clarkeAndWright(void){
 
 		visited[it->rightVertex] = true;
 		visited[it->leftVertex] = true;
-		//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
 		pairsList.erase(it);
 		double cicleTime = 0;
 		double weightTotal = 0; 
 
 		for(it = pairsList.begin(); it != pairsList.end(); it++){
-			cicleTime = getRouteDistance(i)/30.0 + getNumberOfStops(i)*1.5;
 			weightTotal = getWeight(i);
 			if(visited[it->leftVertex] == false and visited[it->rightVertex] == false){
 				continue;
@@ -222,35 +185,27 @@ void SBR::clarkeAndWright(void){
 			}
 
 		
-			if(routes[i][1] == it->leftVertex and cicleTimeIsCorrect(cicleTime, it->rightVertex, 1, i) and 
-			weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
+			if(routes[i][1] == it->leftVertex and weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
 				routes[i].insert(routes[i].begin() + 1, it->rightVertex);
-				visited[it->rightVertex] = true;
-				//std::cout << it->leftVertex << " " << it->rightVertex << "\n"; 
+				visited[it->rightVertex] = true; 
 				pairsList.erase(it);
 			}
 
-			if(routes[i][1] == it->rightVertex and cicleTimeIsCorrect(cicleTime, it->leftVertex, 1, i) and
-			weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
+			if(routes[i][1] == it->rightVertex and weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
 				routes[i].insert(routes[i].begin() + 1, it->leftVertex);
 				visited[it->leftVertex] = true;
-				//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
 				pairsList.erase(it);
 			}
 
-			if(routes[i][routes[i].size() - 1] == it->leftVertex and cicleTimeIsCorrect(cicleTime, it->rightVertex, 2, i) and
-			weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
+			if(routes[i][routes[i].size() - 1] == it->leftVertex and weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
 				routes[i].insert(routes[i].end() - 2, it->rightVertex);
 				visited[it->rightVertex] = true;
-				//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
 				pairsList.erase(it);
 			}
 
-			if(routes[i][routes[i].size() - 1] == it->rightVertex and cicleTimeIsCorrect(cicleTime, it->leftVertex, 2, i) and
-			weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
+			if(routes[i][routes[i].size() - 1] == it->rightVertex and weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
 				routes[i].insert(routes[i].end() - 2, it->leftVertex);
 				visited[it->leftVertex] = true;
-				//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
 				pairsList.erase(it);
 			}
 		

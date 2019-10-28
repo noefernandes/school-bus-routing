@@ -4,12 +4,12 @@
 #include <vector>
 #include <iostream>
 
-const int BusCapacity =  1000; 
+const int BusCapacity = 70; 
 
 struct Pair{
 	int leftVertex;
 	int rightVertex;
-	double saved;
+	int saved;
 
 	Pair(){
 		leftVertex = -1;
@@ -26,9 +26,9 @@ class SBR{
 		SBR(int n){
 			//Alocando a matriz  de adjacência.
 			V = n;
-			double** ma = new double*[V];
+			int** ma = new int*[V];
 			for(auto i(0); i < V; i++){
-				ma[i] = new double[V];
+				ma[i] = new int[V];
 				for(auto j(0); j < V; j++){
 					ma[i][j] = 0;
 				}
@@ -45,6 +45,7 @@ class SBR{
 			C = Ca; 
 
 			//Colocando numero de rotas.
+			//routes.resize(3);
 			routes.resize(3);
 		}
 
@@ -58,15 +59,15 @@ class SBR{
 
 	/*********************************************** FUNÇÕES DE MANIPULAÇÃO DO GRAFO *********************************************/
 	//Retorna a matriz de adjacência.
-	double** getAdjacencyMatrix(void);
+	int** getAdjacencyMatrix(void);
 	//Insere uma aresta no grafo.
-	void insertEdge(int a, int b, double cost);
+	void insertEdge(int a, int b, int cost);
 	//Remove uma aresta do grafo.
 	void removeEdge(int a, int b);
 	//Retorna o vértice adjacente de menor custo.
 	int smallestAdjacentVertex(int a);
 	//Retorna o custo do aresta.
-	double getEdgeCost(int a, int b);
+	int getEdgeCost(int a, int b);
 	//Realiza a leitura pelo da carga de alunos por parada.
 	void loadStudentsPerStop(std::string filename);
 	//Eurística de Clark & Wright na versão sequencial: encontra as rotas que cada ônibus percorrerá.
@@ -76,16 +77,15 @@ class SBR{
 	//Mostra o estado do grafo.
 	void showGraph(void);
 	void showStudentsPerStop(void);
-	double getRouteDistance(int i);
+	int getRouteDistance(int i);
 	int getNumberOfStops(int i);
-	double getWeight(int i);
-	bool cicleTimeIsCorrect(double cicleTime, int vertex, int mode, int i);
-	bool weightIsCorrect(double weightTotal, int vertex, int i);
+	int getWeight(int i);
+	bool weightIsCorrect(int weightTotal, int vertex, int i);
 
 
 	private:
 		//Matriz de adjacência contendo as distâncias entre os vértices (não adjcência representada pelo valor 0).
-		double** m;
+		int** m;
 		//Número de vértices.
 		int V;
 		//Número de ônibus. 
