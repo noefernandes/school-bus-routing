@@ -171,7 +171,7 @@ void SBR::clarkeAndWright(void){
 		visited[it->rightVertex] = true;
 		visited[it->leftVertex] = true;
 		pairsList.erase(it);
-		double cicleTime = 0;
+
 		double weightTotal = 0; 
 
 		for(it = pairsList.begin(); it != pairsList.end(); it++){
