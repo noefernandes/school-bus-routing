@@ -79,7 +79,7 @@ void SBR::showStudentsPerStop(void){
 double SBR::getRouteDistance(int i){
 	double sumRoute = 0;
 	for(unsigned int j(0); j < routes[i].size() - 1; j++){
-		sumRoute += m[routes[0][j]][routes[0][j+1]];
+		sumRoute += m[routes[i][j]][routes[i][j+1]];
 	}
 	return sumRoute;
 }
@@ -97,10 +97,47 @@ double SBR::getWeight(int i){
 
 	for(unsigned int j(0); j < routes[i].size() - 2; j++){
 		pesoTotal += C[routes[i][j+1] - 1];
-		std::cout << pesoTotal;
+		//std::cout << pesoTotal;
 	}
 
 	return pesoTotal;
+}
+
+bool SBR::weightIsCorrect(double weightTotal, int vertex, int i){
+	std::vector<int> temp(routes[i].size());
+	std::copy(routes[i].begin(), routes[i].end(), temp.begin());
+	double pesoTotal = 0;
+
+	temp.insert(temp.begin() + 1, vertex);
+
+	for(unsigned int j(0); j < temp.size() - 2; j++){
+		pesoTotal += C[temp[j+1] - 1];
+	}	
+
+	return pesoTotal <= 1000;
+}
+
+bool SBR::cicleTimeIsCorrect(double cicleTime, int vertex, int mode, int i){
+	std::vector<int> temp(routes[i].size());
+	std::copy(routes[i].begin(), routes[i].end(), temp.begin());
+	double sumRoute = 0;
+	int stops = -1;
+
+	if(mode == 1){
+		temp.insert(temp.begin() + 1, vertex);
+	}else{
+		temp.insert(temp.end() - 2, vertex);
+	}
+
+	for(unsigned int j(0); j < temp.size() - 1; j++){
+		sumRoute += m[temp[j]][temp[j+1]];
+	}
+		
+	for(unsigned int j(0); j < temp.size() - 1; j++){
+		stops++;
+	}
+
+	return sumRoute/30.0 + stops*1.5 <= 8.0;
 }
 
 void SBR::clarkeAndWright(void){
@@ -154,10 +191,6 @@ void SBR::clarkeAndWright(void){
 		visited[i] = false;
 	}
 
-	
-	double cicleTime = 0;
-	double sumRoute = 0;
-
 
 	for(auto i(0); i < numberOfBus; i++){
 		std::vector<Pair>::iterator it = pairsList.begin();
@@ -172,17 +205,89 @@ void SBR::clarkeAndWright(void){
 
 		visited[it->rightVertex] = true;
 		visited[it->leftVertex] = true;
-		std::cout << it->leftVertex << " " << it->rightVertex << "\n";
-		pairsList.erase(it); 
+		//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
+		pairsList.erase(it);
+		double cicleTime = 0;
+		double weightTotal = 0; 
 
 		for(it = pairsList.begin(); it != pairsList.end(); it++){
-			//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
+			cicleTime = getRouteDistance(i)/30.0 + getNumberOfStops(i)*1.5;
+			weightTotal = getWeight(i);
+			if(visited[it->leftVertex] == false and visited[it->rightVertex] == false){
+				continue;
+			}
+
+			if(visited[it->leftVertex] == true and visited[it->rightVertex] == true){
+				continue;
+			}
+
+		
+			if(routes[i][1] == it->leftVertex and cicleTimeIsCorrect(cicleTime, it->rightVertex, 1, i) and 
+			weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
+				routes[i].insert(routes[i].begin() + 1, it->rightVertex);
+				visited[it->rightVertex] = true;
+				//std::cout << it->leftVertex << " " << it->rightVertex << "\n"; 
+				pairsList.erase(it);
+			}
+
+			if(routes[i][1] == it->rightVertex and cicleTimeIsCorrect(cicleTime, it->leftVertex, 1, i) and
+			weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
+				routes[i].insert(routes[i].begin() + 1, it->leftVertex);
+				visited[it->leftVertex] = true;
+				//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
+				pairsList.erase(it);
+			}
+
+			if(routes[i][routes[i].size() - 1] == it->leftVertex and cicleTimeIsCorrect(cicleTime, it->rightVertex, 2, i) and
+			weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
+				routes[i].insert(routes[i].end() - 2, it->rightVertex);
+				visited[it->rightVertex] = true;
+				//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
+				pairsList.erase(it);
+			}
+
+			if(routes[i][routes[i].size() - 1] == it->rightVertex and cicleTimeIsCorrect(cicleTime, it->leftVertex, 2, i) and
+			weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
+				routes[i].insert(routes[i].end() - 2, it->leftVertex);
+				visited[it->leftVertex] = true;
+				//std::cout << it->leftVertex << " " << it->rightVertex << "\n";
+				pairsList.erase(it);
+			}
+		
 		}	
-
-		std::cout << "\n";
 	}
+
+	std::cout << "Roteiro 1: "; 
+	for(unsigned int j(0); j < routes[0].size(); j++){
+		std::cout << routes[0][j] << " ";
+	}
+
+	std::cout << "\n";
+
+	std::cout << "Peso: " << getWeight(0) << "\n";
+	std::cout << "Distancia: " << getRouteDistance(0) << "\n";
 	
+	std::cout << "\n";
+	std::cout << "Roteiro 2: ";
 
+	for(unsigned int j(0); j < routes[1].size(); j++){
+		std::cout << routes[1][j] << " ";
+	}
 
+	std::cout << "\n";
+	std::cout << "Peso: " << getWeight(1) << "\n";
+	std::cout << "Distancia: " << getRouteDistance(1) << "\n";
 
+	std::cout << "\n";
+	std::cout << "Roteiro 3: ";
+
+	for(unsigned int j(0); j < routes[2].size(); j++){
+		std::cout << routes[2][j] << " ";
+	}
+
+	std::cout << "\n";
+	std::cout << "Peso: " << getWeight(2) << "\n";
+	std::cout << "Distancia: " << getRouteDistance(2) << "\n";
+
+	std::cout << "\n";
 }

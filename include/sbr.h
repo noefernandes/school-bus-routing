@@ -45,7 +45,7 @@ class SBR{
 			C = Ca; 
 
 			//Colocando numero de rotas.
-			routes.resize(2);
+			routes.resize(3);
 		}
 
 		//Destrutor.
@@ -79,6 +79,8 @@ class SBR{
 	double getRouteDistance(int i);
 	int getNumberOfStops(int i);
 	double getWeight(int i);
+	bool cicleTimeIsCorrect(double cicleTime, int vertex, int mode, int i);
+	bool weightIsCorrect(double weightTotal, int vertex, int i);
 
 
 	private:
@@ -87,7 +89,7 @@ class SBR{
 		//Número de vértices.
 		int V;
 		//Número de ônibus. 
-		int numberOfBus = 2;
+		int numberOfBus = 3;
 		//Carga a ser coletada (Número de alunos nas paradas).
 		int* C;
 		//Vector com todas as rotas formadas.
