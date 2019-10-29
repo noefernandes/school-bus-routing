@@ -46,7 +46,7 @@ class SBR{
 
 			//Colocando numero de rotas.
 			//routes.resize(3);
-			routes.resize(3);
+			routes.resize(numberOfBus);
 		}
 
 		//Destrutor.
@@ -76,11 +76,16 @@ class SBR{
 	/***************************************************** FUNÇÕES DE AUXÍLIO ****************************************************/
 	//Mostra o estado do grafo.
 	void showGraph(void);
+	//Mostra o número de estudantes por parada.
 	void showStudentsPerStop(void);
+	//Retorna distância da rota.
 	int getRouteDistance(int i);
+	//Retorna o número de paradas na rota.
 	int getNumberOfStops(int i);
+	//Calcula a quantidade total de alunos pegos em determinada rota.
 	int getWeight(int i);
-	bool weightIsCorrect(int weightTotal, int vertex, int i);
+	//Testa se a quantidade total de alunos seria válida para a inserção de um vértice na rota. 
+	bool weightIsCorrect(int vertex, int i);
 
 
 	private:

@@ -95,7 +95,7 @@ int SBR::getWeight(int i){
 	return weightTotal;
 }
 
-bool SBR::weightIsCorrect(int weightTotal, int vertex, int i){
+bool SBR::weightIsCorrect(int vertex, int i){
 	std::vector<int> temp(routes[i].size());
 	std::copy(routes[i].begin(), routes[i].end(), temp.begin());
 	double weight = 0;
@@ -143,7 +143,7 @@ void SBR::clarkeAndWright(void){
 		}
 	}
 
-	//Ordenando a lista de pares pelas duas economias.
+	//Ordenando a lista de pares pelas suas economias.
 	std::sort(pairsList.begin(), pairsList.end(), comparePair);
 
 
@@ -172,10 +172,9 @@ void SBR::clarkeAndWright(void){
 		visited[it->leftVertex] = true;
 		pairsList.erase(it);
 
-		double weightTotal = 0; 
 
 		for(it = pairsList.begin(); it != pairsList.end(); it++){
-			weightTotal = getWeight(i);
+			
 			if(visited[it->leftVertex] == false and visited[it->rightVertex] == false){
 				continue;
 			}
@@ -185,25 +184,25 @@ void SBR::clarkeAndWright(void){
 			}
 
 		
-			if(routes[i][1] == it->leftVertex and weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
+			if(routes[i][1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
 				routes[i].insert(routes[i].begin() + 1, it->rightVertex);
 				visited[it->rightVertex] = true; 
 				pairsList.erase(it);
 			}
 
-			if(routes[i][1] == it->rightVertex and weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
+			if(routes[i][1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
 				routes[i].insert(routes[i].begin() + 1, it->leftVertex);
 				visited[it->leftVertex] = true;
 				pairsList.erase(it);
 			}
 
-			if(routes[i][routes[i].size() - 1] == it->leftVertex and weightIsCorrect(weightTotal, it->rightVertex, i) and visited[it->leftVertex]){
+			if(routes[i][routes[i].size() - 1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
 				routes[i].insert(routes[i].end() - 2, it->rightVertex);
 				visited[it->rightVertex] = true;
 				pairsList.erase(it);
 			}
 
-			if(routes[i][routes[i].size() - 1] == it->rightVertex and weightIsCorrect(weightTotal, it->leftVertex, i) and visited[it->rightVertex]){
+			if(routes[i][routes[i].size() - 1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
 				routes[i].insert(routes[i].end() - 2, it->leftVertex);
 				visited[it->leftVertex] = true;
 				pairsList.erase(it);
