@@ -146,6 +146,11 @@ void SBR::clarkeAndWright(void){
 	//Ordenando a lista de pares pelas suas economias.
 	std::sort(pairsList.begin(), pairsList.end(), comparePair);
 
+	std::cout<<"--------Lista de Economia--------" << std::endl;
+	for(auto i(0); i < pairsList.size(); i++)
+	{
+		std::cout << "| Nó " << pairsList[i].leftVertex << ", "<< pairsList[i].rightVertex << "  Valor: " << pairsList[i].saved <<"|" << std::endl;
+	}
 
 	/*********************************************** Procedimento sequencial *****************************************************/
 	
@@ -168,6 +173,8 @@ void SBR::clarkeAndWright(void){
 		routes[i].push_back(it->rightVertex);
 		routes[i].push_back(0);
 
+		std::cout << "primeiro " << it->leftVertex << " " << it->rightVertex << "\n";
+
 		visited[it->rightVertex] = true;
 		visited[it->leftVertex] = true;
 		pairsList.erase(it);
@@ -176,42 +183,56 @@ void SBR::clarkeAndWright(void){
 		for(it = pairsList.begin(); it != pairsList.end(); it++){
 			
 			if(visited[it->leftVertex] == false and visited[it->rightVertex] == false){
+				std::cout << "If 1\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				continue;
 			}
 
 			if(visited[it->leftVertex] == true and visited[it->rightVertex] == true){
+				std::cout << "If 2\n" << it->leftVertex << " " << it->rightVertex << "\n";
 				continue;
 			}
 
 		
 			if(routes[i][1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
+				std::cout << "If 3\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				routes[i].insert(routes[i].begin() + 1, it->rightVertex);
 				visited[it->rightVertex] = true; 
 				pairsList.erase(it);
 			}
 
 			if(routes[i][1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
+				std::cout << "If 4\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				routes[i].insert(routes[i].begin() + 1, it->leftVertex);
 				visited[it->leftVertex] = true;
 				pairsList.erase(it);
 			}
 
 			if(routes[i][routes[i].size() - 1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
+				std::cout << "If 5\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				routes[i].insert(routes[i].end() - 2, it->rightVertex);
 				visited[it->rightVertex] = true;
 				pairsList.erase(it);
 			}
 
 			if(routes[i][routes[i].size() - 1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
+				std::cout << "If 6\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				routes[i].insert(routes[i].end() - 2, it->leftVertex);
 				visited[it->leftVertex] = true;
 				pairsList.erase(it);
 			}
+			
+			std::cout << "\n";
+			for(unsigned int k(0); k < routes[i].size(); k++){
+				std::cout << routes[i][k] << " ";
+			}
+			std::cout << "\n";
 		
 		}	
+
+	
 	}
 
-	std::cout << "Roteiro 1: "; 
+	std::cout << "\n\nRoteiro 1: "; 
 	for(unsigned int j(0); j < routes[0].size(); j++){
 		std::cout << routes[0][j] << " ";
 	}

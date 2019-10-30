@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 
-const int BusCapacity = 70; 
+const int BusCapacity = 100; 
 
 struct Pair{
 	int leftVertex;
