@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 
-const int BusCapacity = 100; 
+const int BusCapacity = 20; 
 
 struct Pair{
 	int leftVertex;
@@ -54,7 +54,8 @@ class SBR{
 			for(auto i(0); i < V; i++){
 				delete[] m[i];
 			}
-			delete m;			
+			delete m;	
+			delete C;		
 		}
 
 	/*********************************************** FUNÇÕES DE MANIPULAÇÃO DO GRAFO *********************************************/

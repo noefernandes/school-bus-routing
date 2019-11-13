@@ -194,7 +194,11 @@ void SBR::clarkeAndWright(void){
 
 		
 			if(routes[i][1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
-				std::cout << "If 3\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				std::cout << "If 3\n" << it->leftVertex << " " << it->rightVertex << " " << visited[it->leftVertex]<<"\n";				
+				if(visited[it->rightVertex])
+				{
+					continue;
+				}				
 				routes[i].insert(routes[i].begin() + 1, it->rightVertex);
 				visited[it->rightVertex] = true; 
 				pairsList.erase(it);
@@ -202,6 +206,10 @@ void SBR::clarkeAndWright(void){
 
 			if(routes[i][1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
 				std::cout << "If 4\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				if(visited[it->leftVertex])
+				{
+					continue;
+				}	
 				routes[i].insert(routes[i].begin() + 1, it->leftVertex);
 				visited[it->leftVertex] = true;
 				pairsList.erase(it);
@@ -209,6 +217,10 @@ void SBR::clarkeAndWright(void){
 
 			if(routes[i][routes[i].size() - 1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
 				std::cout << "If 5\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				if(visited[it->rightVertex])
+				{
+					continue;
+				}	
 				routes[i].insert(routes[i].end() - 2, it->rightVertex);
 				visited[it->rightVertex] = true;
 				pairsList.erase(it);
@@ -216,6 +228,10 @@ void SBR::clarkeAndWright(void){
 
 			if(routes[i][routes[i].size() - 1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
 				std::cout << "If 6\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				if(visited[it->leftVertex])
+				{
+					continue;
+				}	
 				routes[i].insert(routes[i].end() - 2, it->leftVertex);
 				visited[it->leftVertex] = true;
 				pairsList.erase(it);
