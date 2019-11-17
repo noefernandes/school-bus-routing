@@ -74,7 +74,7 @@ class SBR{
 	//Carrega o peso dos vértices (quantidade de alunos por parada)
 	void loadVertexWeight(std::fstream & File);
 	//Eurística de Clark & Wright na versão sequencial: encontra as rotas que cada ônibus percorrerá.
-	void clarkeAndWright(void);
+	void clarkeAndWright(std::ofstream & OutputFile);
 
 	/***************************************************** FUNÇÕES DE AUXÍLIO ****************************************************/
 	//Mostra o estado do grafo.

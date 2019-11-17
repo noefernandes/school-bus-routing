@@ -6,6 +6,7 @@
 #include <string>
 #include <bits/stdc++.h> 
 #include <vector>
+#include <chrono>
 
 int** SBR::getAdjacencyMatrix(void){
 	return m;
@@ -130,8 +131,10 @@ bool SBR::weightIsCorrect(int vertex, int i){
 	return weight <= BusCapacity;
 }
 
-void SBR::clarkeAndWright(void){
+void SBR::clarkeAndWright(std::ofstream & OutputFile){
 	//Vetor de economias.
+	auto inicial = std::chrono::system_clock::now();
+
 	int** E = new int*[V];
 
 	for(auto i(0); i < V; i++){
@@ -270,19 +273,32 @@ void SBR::clarkeAndWright(void){
 	
 	}
 
+	auto final = std::chrono::system_clock::now();
+
 	for (unsigned int i{0}; i < routes.size(); ++i)
 	{
 		std::cout << "Roteiro " << i+1 << ": ";
+		OutputFile << "Roteiro " << i+1 << ": ";
 		for (unsigned int j{0}; j < routes[i].size(); ++j)
 		{
 			std::cout << routes[i][j] << " ";
+			OutputFile << routes[i][j] << " ";
 		}
 		std::cout << "\n";
 		std::cout << "Peso: " << getWeight(i) << "\n";
 		std::cout << "Distancia: " << getRouteDistance(i) << "\n";
 		std::cout << "\n";
+
+		OutputFile << "\n";
+		OutputFile << "Peso: " << getWeight(i) << "\n";
+		OutputFile << "Distancia: " << getRouteDistance(i) << "\n";
+		OutputFile << "\n";
 	}
 
+	std::chrono::duration<double> diff = final-inicial;
+
+	std::cout << "Tempo decorrido para a formação das rotas: " << diff.count() << "s" << std::endl;
+	OutputFile << "Tempo decorrido para a formação das rotas: " << diff.count() << "s" << std::endl;
 	/*
 	std::cout << "\n\nRoteiro 1: "; 
 	for(unsigned int j(0); j < routes[0].size(); j++){

@@ -12,11 +12,14 @@ int distance(std::pair<int,int> lhs, std::pair<int,int> rhs)
 	return (int) std::floor(std::sqrt(std::pow(rhs.first - lhs.first, 2) + std::pow(rhs.second - rhs.second, 2)));
 }
 
-void loadGraph(std::string filename)
+void loadGraph(std::string filename, std::ofstream & OutputFile)
 {
 	// Stream para ler o arquivo de entrada atual
 	std::fstream File(filename);
 	// String para descartar as partes não desejadas do arquivo de entrada
+	std::cout << "O arquivo de saída abriu? " << OutputFile.is_open() << std::endl;
+	std::cout << "O arquivo de entrada abriu? " << File.is_open() << std::endl;
+
 	std::string dummy;
 	// Ignorando partes denecessárias do arquivo de entrada
 	std::getline(File,dummy);
@@ -68,7 +71,8 @@ void loadGraph(std::string filename)
 
 	int capacidade = std::stoi(buffer);
 
-	//std::cout << "Dimensão grafo: " << tamGrafo << " Num Onibus: " << tamFrota << " capacidade dos onibus: " << capacidade << std::endl;
+	std::cout << "Tamanho do grafo: " << tamGrafo << "\nNúmero de ônibus disponíveis: " << tamFrota << "\nCapacidade dos onibus: " << capacidade << std::endl << std::endl;
+	OutputFile << "Tamanho do grafo: " << tamGrafo << "\nNúmero de ônibus disponíveis: " << tamFrota << "\nCapacidade dos onibus: " << capacidade << std::endl << std::endl;
 
 	SBR sbr(tamGrafo, capacidade, tamFrota);
 
@@ -107,7 +111,7 @@ void loadGraph(std::string filename)
 
 	sbr.loadVertexWeight(File);
 
-	sbr.clarkeAndWright();
+	sbr.clarkeAndWright(OutputFile);
 
 	File.close();
 }
@@ -119,14 +123,22 @@ int main(){
 
 	for(unsigned int i{0}; i < n.size(); i++)
 	{
-		std::cout << "Iniciando os testes: -----------------------" << std::endl;
-		std::cout << "Instância " << i+1 << std::endl;
-		std::cout << std::endl; 
 		std::string filenameFinal;
+		filenameFinal = "Tests/Results/Resultado da Inst_A-" + n[i] + "-" + k[i] + ".txt";
+		std::ofstream OutputFile(filenameFinal);
 
-		filenameFinal = "Tests/Instances/A-" + n[i] + "-" + k[i] + ".vrp";
+		std::cout << "Iniciando os testes: -----------------------" << std::endl;
+		OutputFile << "Iniciando os testes: -----------------------" << std::endl;
+		std::cout << "Instância " << i+1 << std::endl << std::endl;
+		OutputFile << "Instância " << i+1 << std::endl << std::endl;
 
-		loadGraph(filenameFinal);
+		std::string filenameInstance;
+
+		filenameInstance = "Tests/Instances/A-" + n[i] + "-" + k[i] + ".vrp";
+
+		loadGraph(filenameInstance, OutputFile);
+
+		OutputFile.close();
 	}
 
 	return 0;
