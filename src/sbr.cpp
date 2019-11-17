@@ -2,6 +2,7 @@
 #include <iostream>
 #include <limits>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <bits/stdc++.h> 
 #include <vector>
@@ -56,6 +57,26 @@ void SBR::loadStudentsPerStop(std::string filename){
     	}
     	ifs.close();
   	}
+}
+
+void SBR::loadVertexWeight(std::fstream & File)
+{
+	std::string dummy;
+	int i = 0;
+	while(true)
+	{
+		std::getline(File, dummy);
+		if(dummy.compare("DEPOT_SECTION ") == 0)
+		{
+			break;
+		}
+		std::string buffer;
+		std::stringstream oss(dummy);
+		oss >> buffer;
+		buffer.clear();
+		oss >> buffer;
+		C[i++] = std::stoi(buffer);
+	}
 }
 
 bool comparePair(Pair p1, Pair p2) { 
@@ -146,12 +167,13 @@ void SBR::clarkeAndWright(void){
 	//Ordenando a lista de pares pelas suas economias.
 	std::sort(pairsList.begin(), pairsList.end(), comparePair);
 
+	/*
 	std::cout<<"--------Lista de Economia--------" << std::endl;
 	for(auto i(0); i < pairsList.size(); i++)
 	{
 		std::cout << "| Nó " << pairsList[i].leftVertex << ", "<< pairsList[i].rightVertex << "  Valor: " << pairsList[i].saved <<"|" << std::endl;
 	}
-
+	*/
 	/*********************************************** Procedimento sequencial *****************************************************/
 	
 	
@@ -173,7 +195,7 @@ void SBR::clarkeAndWright(void){
 		routes[i].push_back(it->rightVertex);
 		routes[i].push_back(0);
 
-		std::cout << "primeiro " << it->leftVertex << " " << it->rightVertex << "\n";
+		//std::cout << "primeiro " << it->leftVertex << " " << it->rightVertex << "\n";
 
 		visited[it->rightVertex] = true;
 		visited[it->leftVertex] = true;
@@ -183,18 +205,18 @@ void SBR::clarkeAndWright(void){
 		for(it = pairsList.begin(); it != pairsList.end(); it++){
 			
 			if(visited[it->leftVertex] == false and visited[it->rightVertex] == false){
-				std::cout << "If 1\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				//std::cout << "If 1\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				continue;
 			}
 
 			if(visited[it->leftVertex] == true and visited[it->rightVertex] == true){
-				std::cout << "If 2\n" << it->leftVertex << " " << it->rightVertex << "\n";
+				//std::cout << "If 2\n" << it->leftVertex << " " << it->rightVertex << "\n";
 				continue;
 			}
 
 		
 			if(routes[i][1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
-				std::cout << "If 3\n" << it->leftVertex << " " << it->rightVertex << " " << visited[it->leftVertex]<<"\n";				
+				//std::cout << "If 3\n" << it->leftVertex << " " << it->rightVertex << " " << visited[it->leftVertex]<<"\n";				
 				if(visited[it->rightVertex])
 				{
 					continue;
@@ -205,7 +227,7 @@ void SBR::clarkeAndWright(void){
 			}
 
 			if(routes[i][1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
-				std::cout << "If 4\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				//std::cout << "If 4\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				if(visited[it->leftVertex])
 				{
 					continue;
@@ -216,7 +238,7 @@ void SBR::clarkeAndWright(void){
 			}
 
 			if(routes[i][routes[i].size() - 1] == it->leftVertex and weightIsCorrect(it->rightVertex, i) and visited[it->leftVertex]){
-				std::cout << "If 5\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				//std::cout << "If 5\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				if(visited[it->rightVertex])
 				{
 					continue;
@@ -227,7 +249,7 @@ void SBR::clarkeAndWright(void){
 			}
 
 			if(routes[i][routes[i].size() - 1] == it->rightVertex and weightIsCorrect(it->leftVertex, i) and visited[it->rightVertex]){
-				std::cout << "If 6\n" << it->leftVertex << " " << it->rightVertex << "\n";				
+				//std::cout << "If 6\n" << it->leftVertex << " " << it->rightVertex << "\n";				
 				if(visited[it->leftVertex])
 				{
 					continue;
@@ -236,13 +258,13 @@ void SBR::clarkeAndWright(void){
 				visited[it->leftVertex] = true;
 				pairsList.erase(it);
 			}
-			
+			/*
 			std::cout << "\n";
 			for(unsigned int k(0); k < routes[i].size(); k++){
 				std::cout << routes[i][k] << " ";
 			}
 			std::cout << "\n";
-		
+			*/
 		}	
 
 	

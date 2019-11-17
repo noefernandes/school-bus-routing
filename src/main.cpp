@@ -1,80 +1,127 @@
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <vector>
+#include <utility>
+#include <cmath>
 #include "sbr.h"
+
+int distance(std::pair<int,int> lhs, std::pair<int,int> rhs)
+{
+	return (int) std::floor(std::sqrt(std::pow(rhs.first - lhs.first, 2) + std::pow(rhs.second - rhs.second, 2)));
+}
+
+void loadGraph(std::string filename)
+{
+	// Stream para ler o arquivo de entrada atual
+	std::fstream File(filename);
+	// String para descartar as partes não desejadas do arquivo de entrada
+	std::string dummy;
+	// Ignorando partes denecessárias do arquivo de entrada
+	std::getline(File,dummy);
+	std::getline(File, dummy);
+	std::getline(File, dummy);
+	std::getline(File, dummy);
+
+	std::string buffer;
+	std::stringstream oss(dummy);
+
+	oss >> buffer;
+	buffer.clear();
+	oss >> buffer;
+	buffer.clear();
+	oss >> buffer;
+
+	int tamGrafo = std::stoi(buffer);
+
+	buffer.clear();
+
+	std::getline(File, dummy);
+
+	oss.clear();
+	oss.str(dummy);
+
+	oss >> buffer;
+	buffer.clear();
+	oss >> buffer;
+	buffer.clear();
+	oss >> buffer;
+	buffer.clear();
+	oss >> buffer;
+
+	int tamFrota = std::stoi(buffer);
+
+	buffer.clear();
+
+	std::getline(File, dummy);
+	std::getline(File, dummy);
+
+	oss.clear();
+	oss.str(dummy);
+
+	oss >> buffer;
+	buffer.clear();
+	oss >> buffer;
+	buffer.clear();
+	oss >> buffer;
+
+	int capacidade = std::stoi(buffer);
+
+	//std::cout << "Dimensão grafo: " << tamGrafo << " Num Onibus: " << tamFrota << " capacidade dos onibus: " << capacidade << std::endl;
+
+	SBR sbr(tamGrafo, capacidade, tamFrota);
+
+	std::getline(File, dummy);
+	std::vector<std::pair<int, int>> pairVector;
+	//std::cout << "Fui Comparar o dummy" << std::endl;
+	while(dummy.compare("DEMAND_SECTION ") != 0)
+	{
+		std::pair<int,int> par;
+		int x,y;
+
+		std::getline(File, dummy);
+		oss.clear();
+		oss.str(dummy);
+		buffer.clear();
+
+		oss >> buffer;
+		buffer.clear();
+		oss >> x;
+		oss >> y;
+		
+		par = std::make_pair(x,y);
+		pairVector.push_back(par);
+	}
+	//std::cout << "Acabei o vector"<<std::endl;
+
+	for(unsigned int i{0}; i < pairVector.size()-1; i++)
+	{
+		for(unsigned int j{i+1}; j < pairVector.size()-1; j++)
+		{
+			//std::cout << "x1 = (" << pairVector[i].first << "/" << pairVector[i].second << ") x2 = (" << pairVector[j].first << "/" << pairVector[j].second  << ")"<< std::endl;
+			sbr.insertEdge(i, j, distance(pairVector[i], pairVector[j]));
+		}	
+	}	
+	//std::cout << "Acabei de ler os vértices" << std::endl;;
+
+	sbr.loadVertexWeight(File);
+
+	sbr.clarkeAndWright();
+
+	File.close();
+}
+
 int main(){
 
-	SBR sbr(11);
+	std::vector<std::string> n = {"n32", "n33", "n33", "n34", "n36", "n37", "n37", "n38", "n39", "n39", "n44"};
+	std::vector<std::string> k = {"k5", "k5", "k6", "k5", "k5", "k5", "k6", "k5", "k5", "k6", "k6"}; 
 
-	sbr.insertEdge(0, 1, 24);
-	sbr.insertEdge(0, 2, 3);
-	sbr.insertEdge(0, 3, 7);
-	sbr.insertEdge(0, 4, 5);
-	sbr.insertEdge(0, 5, 15);
-	sbr.insertEdge(0, 6, 17);
-	sbr.insertEdge(0, 7, 6);
-	sbr.insertEdge(0, 8, 7);
-	sbr.insertEdge(0, 9, 11);
-	sbr.insertEdge(0, 10, 10);
+	std::string filenameFinal;
 
+	filenameFinal = "Tests/Instances/A-" + n[0] + "-" + k[0] + ".vrp";
 
-	sbr.insertEdge(1, 2, 20);
-	sbr.insertEdge(1, 3, 20);
-	sbr.insertEdge(1, 4, 20);
-	sbr.insertEdge(1, 5, 33);
-	sbr.insertEdge(1, 6, 9);
-	sbr.insertEdge(1, 7, 21);
-	sbr.insertEdge(1, 8, 17);
-	sbr.insertEdge(1, 9, 18);
-	sbr.insertEdge(1, 10, 15);
-
-	sbr.insertEdge(2, 3, 4);
-	sbr.insertEdge(2, 4, 4);
-	sbr.insertEdge(2, 5, 17);
-	sbr.insertEdge(2, 6, 12);
-	sbr.insertEdge(2, 7, 6);
-	sbr.insertEdge(2, 8, 5);
-	sbr.insertEdge(2, 9, 12);
-	sbr.insertEdge(2, 10, 7);
-
-	sbr.insertEdge(3, 4, 7);
-	sbr.insertEdge(3, 5, 21);
-	sbr.insertEdge(3, 6, 14);
-	sbr.insertEdge(3, 7, 10);
-	sbr.insertEdge(3, 8, 7);
-	sbr.insertEdge(3, 9, 12);
-	sbr.insertEdge(3, 10, 10);
-
-	sbr.insertEdge(4, 5, 14);
-	sbr.insertEdge(4, 6, 12);
-	sbr.insertEdge(4, 7, 4);
-	sbr.insertEdge(4, 8, 4);
-	sbr.insertEdge(4, 9, 6);
-	sbr.insertEdge(4, 10, 8);
-
-	sbr.insertEdge(5, 6, 27);
-	sbr.insertEdge(5, 7, 13);
-	sbr.insertEdge(5, 8, 17);
-	sbr.insertEdge(5, 9, 16);
-	sbr.insertEdge(5, 10, 21);
-
-	sbr.insertEdge(6, 7, 15);
-	sbr.insertEdge(6, 8, 10);
-	sbr.insertEdge(6, 9, 14);
-	sbr.insertEdge(6, 10, 9);
-
-	sbr.insertEdge(7, 8, 4);
-	sbr.insertEdge(7, 9, 4);
-	sbr.insertEdge(7, 10, 8);
-
-	sbr.insertEdge(8, 9, 5);
-	sbr.insertEdge(8, 10, 4);
-
-	sbr.insertEdge(9, 10, 4);
-
-	//sbr.showGraph();
-
-	sbr.loadStudentsPerStop("paradas.txt");
-	//sbr.showStudentsPerStop();
-	sbr.clarkeAndWright();
+	loadGraph(filenameFinal);
 
 	return 0;
 }

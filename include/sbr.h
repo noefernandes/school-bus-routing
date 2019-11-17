@@ -4,8 +4,6 @@
 #include <vector>
 #include <iostream>
 
-const int BusCapacity = 20; 
-
 struct Pair{
 	int leftVertex;
 	int rightVertex;
@@ -23,7 +21,9 @@ class SBR{
 	public:
 
 		//Construtor.
-		SBR(int n){
+		SBR(int n, int capacity, int bus){
+			BusCapacity = capacity;
+			numberOfBus = bus;
 			//Alocando a matriz  de adjacência.
 			V = n;
 			int** ma = new int*[V];
@@ -71,6 +71,8 @@ class SBR{
 	int getEdgeCost(int a, int b);
 	//Realiza a leitura pelo da carga de alunos por parada.
 	void loadStudentsPerStop(std::string filename);
+	//Carrega o peso dos vértices (quantidade de alunos por parada)
+	void loadVertexWeight(std::fstream & File);
 	//Eurística de Clark & Wright na versão sequencial: encontra as rotas que cada ônibus percorrerá.
 	void clarkeAndWright(void);
 
@@ -95,7 +97,9 @@ class SBR{
 		//Número de vértices.
 		int V;
 		//Número de ônibus. 
-		int numberOfBus = 3;
+		int numberOfBus;
+		// Capacidade do ônibus
+		int BusCapacity; 
 		//Carga a ser coletada (Número de alunos nas paradas).
 		int* C;
 		//Vector com todas as rotas formadas.
