@@ -270,6 +270,20 @@ void SBR::clarkeAndWright(void){
 	
 	}
 
+	for (unsigned int i{0}; i < routes.size(); ++i)
+	{
+		std::cout << "Roteiro " << i+1 << ": ";
+		for (unsigned int j{0}; j < routes[i].size(); ++j)
+		{
+			std::cout << routes[i][j] << " ";
+		}
+		std::cout << "\n";
+		std::cout << "Peso: " << getWeight(i) << "\n";
+		std::cout << "Distancia: " << getRouteDistance(i) << "\n";
+		std::cout << "\n";
+	}
+
+	/*
 	std::cout << "\n\nRoteiro 1: "; 
 	for(unsigned int j(0); j < routes[0].size(); j++){
 		std::cout << routes[0][j] << " ";
@@ -303,4 +317,5 @@ void SBR::clarkeAndWright(void){
 	std::cout << "Distancia: " << getRouteDistance(2) << "\n";
 
 	std::cout << "\n";
+	*/
 }

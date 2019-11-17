@@ -117,11 +117,17 @@ int main(){
 	std::vector<std::string> n = {"n32", "n33", "n33", "n34", "n36", "n37", "n37", "n38", "n39", "n39", "n44"};
 	std::vector<std::string> k = {"k5", "k5", "k6", "k5", "k5", "k5", "k6", "k5", "k5", "k6", "k6"}; 
 
-	std::string filenameFinal;
+	for(unsigned int i{0}; i < n.size(); i++)
+	{
+		std::cout << "Iniciando os testes: -----------------------" << std::endl;
+		std::cout << "Instância " << i+1 << std::endl;
+		std::cout << std::endl; 
+		std::string filenameFinal;
 
-	filenameFinal = "Tests/Instances/A-" + n[0] + "-" + k[0] + ".vrp";
+		filenameFinal = "Tests/Instances/A-" + n[i] + "-" + k[i] + ".vrp";
 
-	loadGraph(filenameFinal);
+		loadGraph(filenameFinal);
+	}
 
 	return 0;
 }
