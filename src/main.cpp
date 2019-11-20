@@ -17,9 +17,6 @@ void loadGraph(std::string filename, std::ofstream & OutputFile)
 	// Stream para ler o arquivo de entrada atual
 	std::fstream File(filename);
 	// String para descartar as partes não desejadas do arquivo de entrada
-	std::cout << "O arquivo de saída abriu? " << OutputFile.is_open() << std::endl;
-	std::cout << "O arquivo de entrada abriu? " << File.is_open() << std::endl;
-
 	std::string dummy;
 	// Ignorando partes denecessárias do arquivo de entrada
 	std::getline(File,dummy);
@@ -118,8 +115,8 @@ void loadGraph(std::string filename, std::ofstream & OutputFile)
 
 int main(){
 
-	std::vector<std::string> n = {"n32", "n33", "n33", "n34", "n36", "n37", "n37", "n38", "n39", "n39", "n44"};
-	std::vector<std::string> k = {"k5", "k5", "k6", "k5", "k5", "k5", "k6", "k5", "k5", "k6", "k6"}; 
+	std::vector<std::string> n = {"n32", "n33", "n33", "n34", "n36", "n37", "n37", "n38", "n39", "n39", "n44", "n45", "n45", "n46", "n48", "n53", "n54", "n55", "n60", "n61", "n62", "n63", "n63", "n64", "n65", "n69", "n80"};
+	std::vector<std::string> k = {"k5", "k5", "k6", "k5", "k5", "k5", "k6", "k5", "k5", "k6", "k6", "k6", "k7", "k7", "k7", "k7", "k7", "k9", "k9", "k9", "k8", "k9", "k10", "k9", "k9", "k9", "k10"}; 
 
 	for(unsigned int i{0}; i < n.size(); i++)
 	{

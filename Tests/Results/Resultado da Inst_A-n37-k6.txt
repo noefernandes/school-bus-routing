@@ -29,4 +29,4 @@ Roteiro 6: 0 27 36 0
 Peso: 86
 Distancia: 32
 
-Tempo decorrido para a formação das rotas: 0.00173558s
+Tempo decorrido para a formação das rotas: 0.000343909s

@@ -1,0 +1,44 @@
+Iniciando os testes: -----------------------
+Instância 22
+
+Tamanho do grafo: 63
+Número de ônibus disponíveis: 9
+Capacidade dos onibus: 100
+
+Roteiro 1: 0 20 48 36 38 8 45 1 27 24 59 0 
+Peso: 99
+Distancia: 180
+
+Roteiro 2: 0 2 49 3 46 31 5 41 0 
+Peso: 100
+Distancia: 148
+
+Roteiro 3: 0 50 54 47 30 18 9 42 43 0 
+Peso: 100
+Distancia: 140
+
+Roteiro 4: 0 61 23 29 4 34 0 
+Peso: 99
+Distancia: 120
+
+Roteiro 5: 0 32 13 52 39 60 62 0 
+Peso: 99
+Distancia: 92
+
+Roteiro 6: 0 17 35 10 6 16 25 57 0 
+Peso: 100
+Distancia: 68
+
+Roteiro 7: 0 53 12 56 22 28 7 37 51 0 
+Peso: 100
+Distancia: 76
+
+Roteiro 8: 0 11 14 26 44 58 15 19 0 
+Peso: 100
+Distancia: 40
+
+Roteiro 9: 0 55 21 33 0 
+Peso: 53
+Distancia: 24
+
+Tempo decorrido para a formação das rotas: 0.00129746s

@@ -25,4 +25,4 @@ Roteiro 5: 0 32 11 21 29 0
 Peso: 79
 Distancia: 24
 
-Tempo decorrido para a formação das rotas: 0.00181374s
+Tempo decorrido para a formação das rotas: 0.000302405s

@@ -25,4 +25,4 @@ Roteiro 5: 0 0 0 0
 Peso: 0
 Distancia: 0
 
-Tempo decorrido para a formação das rotas: 0.00156428s
+Tempo decorrido para a formação das rotas: 0.000312475s
