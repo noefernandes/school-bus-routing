@@ -59,18 +59,20 @@ void SBR::loadStudentsPerStop(std::string filename){
     	ifs.close();
   	}
 }
-
+// Essa função lê o peso de cada vértice, fornecido por um arquivo de entrada
 void SBR::loadVertexWeight(std::fstream & File)
 {
 	std::string dummy;
 	int i = 0;
 	while(true)
 	{
+		// Aqui vamos verificar se não alcançamos a proxima seção
 		std::getline(File, dummy);
 		if(dummy.compare("DEPOT_SECTION ") == 0)
 		{
 			break;
 		}
+		// Caso esteja tudo em ordem, começamos a ler o arquivo até encontrarmos a proxima seção
 		std::string buffer;
 		std::stringstream oss(dummy);
 		oss >> buffer;
